@@ -33,7 +33,16 @@ function AnswerGeneretor(props) {
 
   return (
     <div>
+      <div style={{ margin: "10px" }}>
+        <button className="btn btn-default" onClick={addField}>
+          Add option
+        </button>
+        <button className="btn btn-default" style={{margin:'5px'}} onClick={submit}>
+          Fin Option
+        </button>
+      </div>
       <form onSubmit={submit}>
+      
         {formFields.map((form, index) => {
           return (
             <div key={index}>
@@ -55,14 +64,7 @@ function AnswerGeneretor(props) {
           );
         })}
       </form>
-      <div style={{ margin: "10px" }}>
-        <button className="btn btn-primary" onClick={addField}>
-          Add option
-        </button>
-        <button className="btn btn-primary" onClick={submit}>
-          Submit
-        </button>
-      </div>
+      
     </div>
   );
 }
