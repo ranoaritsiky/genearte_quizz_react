@@ -9,5 +9,3 @@ export const add_question = (question) => {
     question,
   };
 };
-
-
