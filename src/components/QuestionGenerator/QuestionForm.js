@@ -2,83 +2,98 @@ import * as React from "react";
 
 import { useState } from "react";
 import { useDispatch } from "react-redux";
+import { useFormik } from "formik";
 
 import { add_question } from "../../store/actions";
 
 import Switch from "@mui/material/Switch";
 
-import AnswerGeneretor from "./OptionGenerator";
-const QuestionForm = () => {
-  
-  const [question, setQuestion] = useState("");
+import OptionGenerator from "./OptionGenerator";
 
-  const [code, setCode] = useState("");
+const QuestionForm = (props) => {
+  // ref to access in Optiongenerator component
+  const [codeSection, showCodeBlock] = useState(false);
 
-  // used to show code textarea
-  const [addCode, setAddCode] = useState(false);
-  
   // used to store all options after submit in OptionGenerator component
-  const [options, setOption] = useState();
-  
+  const [options, addOption] = useState();
+
+  // use dispatch
   const dispatch = useDispatch();
+
   
+  // save question and update store
+  const saveQuestion = React.useCallback((a,b) =>
+    dispatch(
+      add_question({
+        question: a,
+        codeQuestion: b
+      })
+    ),[]);
+
   const enableCodeSection = () => {
-    setAddCode(!addCode);
+    showCodeBlock(!codeSection);
   };
 
-  const saveQuestion = React.useCallback(
-    () =>
-    
-      dispatch(
-        add_question({
-          question:question,
-          code: code,
-          option:options
-        })
-      ),  
-    [dispatch,question,code,options]
-  );
+  const formik = useFormik({
+    initialValues: {
+      titleQuestion: "",
+      codeQuestion: "",
+    },
+    onSubmit: (values, { resetForm }) => {
+      if (values.titleQuestion) {
+        saveQuestion(values.titleQuestion,values.codeQuestion)
+        // setQuestion(values.titleQuestion);
+        // setCode(values.codeQuestion);
+
+        // saveQuestion();
+      } else if (values.titleQuestion || values.codeQuestion) {
+        alert("must fill all ");
+      } else {
+        resetForm({ values: "" });
+      }
+    },
+  });
 
   return (
-    <div
-      className="d-flex p-2"
-      style={{ maxWidth: "30%", minWidth: "30%", border: "1px solid" }}
-    >
-      <form>
-        <div className="form-group">
-          <input
-            type="text"
-            value={question}
-            onChange={(event) => setQuestion(event.target.value)}
-            placeholder="Question"
-          />
-        </div>
-        <hr />
-        <u>
-          <span>Add Code</span>
-        </u>
+    <>
+      <form
+        style={{ maxWidth: "30%" }}
+        className="m-3"
+        onSubmit={formik.handleSubmit}
+      >
+        <label htmlFor="user">User form</label>
+        <input
+          type="text"
+          name="titleQuestion"
+          className="form-control"
+          onChange={formik.handleChange}
+          value={formik.values.titleQuestion}
+          style={{ marginBottom: "5px" }}
+        />
+        {/* switch to show code section */}
         <Switch
           onChange={enableCodeSection}
           inputProps={{ "aria-label": "controlled" }}
         />
-        {addCode ? (
-          <div className="form-group">
-            <textarea
-              value={code}
-              onChange={(event) => setCode(event.target.value)}
-              placeholder="Code"
-            />
-          </div>
-        ) : null}
-      </form>
-      <u>
-        <span>Options</span>
-      </u>
+        <span>Add Code</span>
 
-      <AnswerGeneretor setOption={setOption} />
-      <hr />
-      <button onClick={saveQuestion}>Submit</button>
-    </div>
+        {/* show code if codeSection is true else show null */}
+        {codeSection ? (
+          <textarea
+            name="codeQuestion"
+            className="form-control"
+            onChange={formik.handleChange}
+            value={formik.values.codeQuestion}
+          />
+        ) : null}
+        {/* <OptionGenerator addOption={addOption} optionRef={optionRef} /> */}
+        <div>
+          <button className="btn btn-primary mt-4" type="submit">
+            Ajout
+          </button>
+        </div>
+      </form>
+    </>
   );
 };
 

@@ -3,7 +3,7 @@ import QuestionList from './QuestionList'
 
 const QuestionMain =()=>{
     return (
-        <div className="d-flex flex-row p-3" style={{ height: "100vh",margin:'10px' }}>
+        <div className="d-flex p-3" style={{ height: "90vh",margin:'10px' }}>
             <QuestionForm/>
             <QuestionList/>
         </div>

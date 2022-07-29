@@ -1,28 +1,37 @@
 import { useState } from "react";
 
-function AnswerGeneretor(props) {
+import Switch from "@mui/material/Switch";
+
+import Stack from "@mui/material/Stack";
+import IconButton from "@mui/material/IconButton";
+import AddIcon from "@material-ui/icons/Add";
+
+function OptionGenerator(props) {
   const [formFields, setFormFields] = useState([{ name: "" }, { name: "" }]);
 
+  const [multiAnswer, setMultiAnswer] = useState(false);
+
+  const enableMultipleAnswer = () => {
+    setMultiAnswer(!multiAnswer);
+  };
   const handleFormChange = (event, index) => {
     let data = [...formFields];
     data[index][event.target.name] = event.target.value;
     setFormFields(data);
   };
 
-  const addField = () => {
+  const submit = (e) => {
     let object = {
       name: "",
     };
 
     setFormFields([...formFields, object]);
-  };
-
-  const submit = (e) => {
 
     e.preventDefault();
-    props.setOption(formFields)
+  };
 
-    setFormFields([{ name: "" }, { name: "" }]);
+  const sendOption = () => {
+    props.addOption(formFields);
   };
 
   const removeFields = (index) => {
@@ -32,41 +41,44 @@ function AnswerGeneretor(props) {
   };
 
   return (
-    <div>
-      <div style={{ margin: "10px" }}>
-        <button className="btn btn-default" onClick={addField}>
-          Add option
-        </button>
-        <button className="btn btn-default" style={{margin:'5px'}} onClick={submit}>
-          Fin Option
-        </button>
+    <>
+      <div
+        style={{ margin: "10px" }}
+        className="d-flex justify-content-between"
+      >
+        <Stack direction="row" alignItems="center" spacing={1}>
+          <IconButton aria-label="add" size="small" onClick={submit}>
+            <AddIcon fontSize="inherit" /> <span>Add Option</span>
+          </IconButton>
+        </Stack>
+        <Switch
+          onChange={enableMultipleAnswer}
+          inputProps={{ "aria-label": "controlled" }}
+        />
+        <span>Multiple answer</span>
       </div>
-      <form onSubmit={submit}>
-      
-        {formFields.map((form, index) => {
-          return (
-            <div key={index}>
-              <input
-                name="name"
-                placeholder="Option"
-                onChange={(event) => handleFormChange(event, index)}
-                value={form.name}
-              />
+      {formFields.map((form, index) => {
+        return (
+          <div key={index}>
+            <input
+              name="name"
+              placeholder="Option"
+              onChange={(event) => handleFormChange(event, index)}
+              value={form.name}
+            />
 
-              <button
-                className="btn btn-default"
-                style={{ margin: "10px" }}
-                onClick={() => removeFields(index)}
-              >
-                Remove
-              </button>
-            </div>
-          );
-        })}
-      </form>
-      
-    </div>
+            <button
+              className="btn btn-danger"
+              style={{ margin: "10px" }}
+              onClick={() => removeFields(index)}
+            >
+              Remove
+            </button>
+          </div>
+        );
+      })}
+    </>
   );
 }
 
-export default AnswerGeneretor;
+export default OptionGenerator;
