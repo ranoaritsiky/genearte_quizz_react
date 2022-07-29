@@ -5,7 +5,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 
 const QuestionList = () => {
   const questionState = useSelector((state) => state);
-
+  console.log(questionState)
   return (
     <div
       className="d-flex flex-column p-3  w-75"
@@ -29,12 +29,12 @@ const QuestionList = () => {
                 </div>
               </li>
               <li className="list-group-item">
-                {/* {q.option.map((op, index) => (
+                {q.option.map((op, index) => (
                 <div key={index}>
                   <input type="checkbox"/>
                   {op.name}
                 </div>
-              ))} */}
+              ))}
               </li>
             </ul>
           </div>
