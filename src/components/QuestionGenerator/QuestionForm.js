@@ -11,11 +11,13 @@ import Switch from "@mui/material/Switch";
 import OptionGenerator from "./OptionGenerator";
 
 const QuestionForm = (props) => {
+
   // ref to access in Optiongenerator component
   const [codeSection, showCodeBlock] = useState(false);
 
   // used to store all options after submit in OptionGenerator component
   const [options, addOption] = useState();
+
 
   // use dispatch
   const dispatch = useDispatch();
@@ -26,9 +28,10 @@ const QuestionForm = (props) => {
     dispatch(
       add_question({
         question: a,
-        codeQuestion: b
+        codeQuestion: b,
+        option:options
       })
-    ),[]);
+    ),[options]);
 
   const enableCodeSection = () => {
     showCodeBlock(!codeSection);
@@ -42,15 +45,10 @@ const QuestionForm = (props) => {
     onSubmit: (values, { resetForm }) => {
       if (values.titleQuestion) {
         saveQuestion(values.titleQuestion,values.codeQuestion)
-        // setQuestion(values.titleQuestion);
-        // setCode(values.codeQuestion);
-
-        // saveQuestion();
-      } else if (values.titleQuestion || values.codeQuestion) {
-        alert("must fill all ");
-      } else {
         resetForm({ values: "" });
-      }
+      } else if (!values.titleQuestion ) {
+        alert("must fill all ");
+      } 
     },
   });
 
@@ -86,7 +84,7 @@ const QuestionForm = (props) => {
             value={formik.values.codeQuestion}
           />
         ) : null}
-        {/* <OptionGenerator addOption={addOption} optionRef={optionRef} /> */}
+        <OptionGenerator addOption={addOption}  />
         <div>
           <button className="btn btn-primary mt-4" type="submit">
             Ajout
