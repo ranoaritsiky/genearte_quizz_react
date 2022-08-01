@@ -5,7 +5,8 @@ import InfiniteScroll from "react-infinite-scroll-component";
 
 const QuestionList = () => {
   const questionState = useSelector((state) => state);
-  console.log(questionState)
+
+  console.log(questionState);
   return (
     <div
       className="d-flex flex-column p-3  w-75"
@@ -14,27 +15,37 @@ const QuestionList = () => {
         overflowY: "scroll",
       }}
     >
-      <InfiniteScroll
-        dataLength={20}
-      >
+      <InfiniteScroll dataLength={10}>
         {questionState.map((q, i) => (
           <div key={i} className="card m-2">
             <ul className="list-group list-group-flush">
               <li className="list-group-item">
-                <span>Q- </span> {q.question}
+                <span>Q {i + 1}- </span> {q.question}
               </li>
               <li className="list-group-item">
-                <div>
-                  <CodeBlock code={q.codeQuestion} />
-                </div>
+                {q.codeVisibility ? (
+                  <div>
+                    <CodeBlock code={q.codeQuestion} />
+                  </div>
+                ) : null}
               </li>
               <li className="list-group-item">
-                {q.option.map((op, index) => (
-                <div key={index}>
-                  <input type="checkbox"/>
-                  {op.name}
-                </div>
-              ))}
+                {/* show action in input radio or checkbox */}
+                {q.typeOption
+                  ? q.option.map((op, index) => (
+                      <div key={index}>
+                        <input type="checkbox" />
+
+                        {op.name}
+                      </div>
+                    ))
+                  : q.option.map((op, index) => (
+                      <div key={index}>
+                        <input type="checkbox" />
+
+                        {op.name}
+                      </div>
+                    ))}
               </li>
             </ul>
           </div>
