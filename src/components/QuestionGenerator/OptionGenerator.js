@@ -18,9 +18,13 @@ function OptionGenerator(props) {
     let data = [...formFields];
     data[index][event.target.name] = event.target.value;
     setFormFields(data);
+    props.addOption(formFields)
+    props.setTypeOption(multiAnswer)
   };
 
-  const submit = (e) => {
+  
+
+  const addOption = (e) => {
     let object = {
       name: "",
     };
@@ -30,9 +34,7 @@ function OptionGenerator(props) {
     e.preventDefault();
   };
 
-  const sendOption = () => {
-    props.addOption(formFields);
-  };
+  
 
   const removeFields = (index) => {
     let data = [...formFields];
@@ -47,7 +49,7 @@ function OptionGenerator(props) {
         className="d-flex justify-content-between"
       >
         <Stack direction="row" alignItems="center" spacing={1}>
-          <IconButton aria-label="add" size="small" onClick={submit}>
+          <IconButton aria-label="add" size="small" onClick={addOption}>
             <AddIcon fontSize="inherit" /> <span>Add Option</span>
           </IconButton>
         </Stack>
@@ -61,10 +63,13 @@ function OptionGenerator(props) {
         return (
           <div key={index}>
             <input
+            id="option"
+              className="form-control"
               name="name"
               placeholder="Option"
               onChange={(event) => handleFormChange(event, index)}
               value={form.name}
+              required
             />
 
             <button

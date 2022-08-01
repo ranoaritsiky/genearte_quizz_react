@@ -18,21 +18,32 @@ const QuestionForm = (props) => {
   // used to store all options after submit in OptionGenerator component
   const [options, addOption] = useState();
 
+  const [typeOption,setTypeOption]=useState()
+
 
   // use dispatch
   const dispatch = useDispatch();
 
   
   // save question and update store
-  const saveQuestion = React.useCallback((a,b) =>
+  // const saveQuestion = React.useCallback((questionTitle,codeQuestion) =>
+  //   dispatch(
+  //     add_question({
+  //       question: questionTitle,
+  //       codeQuestion: codeQuestion,
+  //       option:options
+  //     })
+  //   )[options]);
+    const saveQuestion =(questionTitle,codeQuestion) =>
     dispatch(
       add_question({
-        question: a,
-        codeQuestion: b,
-        option:options
+        question: questionTitle,
+        codeQuestion: codeQuestion,
+        option:options,
+        codeVisibility:codeSection,
+        typeOption:typeOption
       })
-    ),[options]);
-
+    );
   const enableCodeSection = () => {
     showCodeBlock(!codeSection);
   };
@@ -84,7 +95,7 @@ const QuestionForm = (props) => {
             value={formik.values.codeQuestion}
           />
         ) : null}
-        <OptionGenerator addOption={addOption}  />
+        <OptionGenerator addOption={addOption} setTypeOption={setTypeOption} />
         <div>
           <button className="btn btn-primary mt-4" type="submit">
             Ajout
